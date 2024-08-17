@@ -9,13 +9,15 @@ namespace Player
     public class PlayerController : MonoBehaviour
     {
         // Movement speed of the player
-        [SerializeField] private float movementSpeed = 5f;
+        [Header("Movement Setup")]
+        [SerializeField] private float movementSpeed = 15f;
         [SerializeField] private GameObject projectilePrefab;
 
+        [Space(10)]
+
+        [Header("Attack Setup")]
         [SerializeField] private int hitRange = 2;
-
         [SerializeField] private int meleeAttackDamage = 30;
-
         [SerializeField] private LayerMask enemyLayers;  // The layers that should be considered as enemies
 
         // Rigidbody component for physics-based movement
