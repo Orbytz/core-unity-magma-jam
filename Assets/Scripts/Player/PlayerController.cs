@@ -8,10 +8,20 @@ namespace Player
         // Movement speed of the player
         [SerializeField] private float movementSpeed = 5f;
         [SerializeField] private GameObject projectilePrefab;
+
+        [SerializeField] private int hitRange = 2;
+
+        [SerializeField] private int meleeAttackDamage = 30;
+
+        [SerializeField] private LayerMask enemyLayers;  // The layers that should be considered as enemies
+
         // Rigidbody component for physics-based movement
         private Rigidbody _rigidbody;
 
         private bool _leftMouseButtonDown;
+
+        private bool _leftShiftButtonDown;
+
         private void Start()
         {
             // Get the Rigidbody component attached to this GameObject
@@ -49,7 +59,17 @@ namespace Player
             {
                 _leftMouseButtonDown = false;
             }
-            
+
+            if (Input.GetButtonDown("Fire3") && !_leftShiftButtonDown)
+            {
+                MeleeAttack();
+                _leftShiftButtonDown = true;
+            }
+
+            if (Input.GetButtonUp("Fire3"))
+            {
+                _leftShiftButtonDown = false;
+            }
         }
         
 
@@ -82,6 +102,18 @@ namespace Player
             }
             return Vector3.zero;
         }
-        
+
+        private void MeleeAttack()
+        {
+            RaycastHit hit;
+            Vector3 forward = transform.TransformDirection(Vector3.forward);
+            Vector3 origin = transform.position;
+
+            if(Physics.Raycast(origin, forward, out hit, hitRange, enemyLayers))
+            {
+                hit.transform.gameObject.SendMessage("ApplyDamage", meleeAttackDamage);
+            }
+            
+        }
     }
 }
