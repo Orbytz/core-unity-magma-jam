@@ -14,6 +14,7 @@ namespace Player
         [SerializeField] private GameObject projectilePrefab;
         [SerializeField] private GameObject MeleeAttackPrefab;
         [SerializeField] private float hitRange = 0.5f;
+        [SerializeField] private float recoverTime = 0.7f;
 
         [Space(10)]
 
@@ -33,6 +34,8 @@ namespace Player
 
         private MeleeAttackBox _meleeAttackBox = null;
 
+        private float _previousMeleeAttack;
+
         private void Start()
         {
             // Get the Rigidbody component attached to this GameObject
@@ -43,6 +46,8 @@ namespace Player
             }
             // Get the main camera
             _mainCamera = Camera.main;
+
+            _previousMeleeAttack = Time.time;
         }
 
         private void Update()
@@ -129,7 +134,8 @@ namespace Player
             Vector3 origin = transform.position;
             Vector3 forward = (transform.forward * hitRange) + origin;
 
-            if (_meleeAttackBox == null) {
+            if (_meleeAttackBox == null && Time.time > _previousMeleeAttack + recoverTime) {
+                _previousMeleeAttack = Time.time;
                 GameObject attackBox = Instantiate(MeleeAttackPrefab, forward, transform.rotation);
                 _meleeAttackBox = attackBox.GetComponent<MeleeAttackBox>();
                 _meleeAttackBox.transform.parent = gameObject.transform;
