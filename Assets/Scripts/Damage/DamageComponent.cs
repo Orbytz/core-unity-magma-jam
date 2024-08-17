@@ -34,7 +34,6 @@ namespace Damage
     
         private void ApplyDamage(Collider other)
         {
-            Debug.LogError("damage");
             other.gameObject.GetComponent<Damageable>().ApplyDamage(damage);
         }
 

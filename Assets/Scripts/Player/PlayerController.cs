@@ -21,7 +21,16 @@ namespace Player
         [SerializeField] private float rotationSpeed = 10f;  // Speed at which the player rotates
         [SerializeField] private GameObject MeleeAttackPrefab;
         [SerializeField] private float hitRange = 0.5f;
-        [SerializeField] private float recoverTime = 0.7f;
+        [SerializeField] private float meleeAttackRecoverTime = 0.7f;
+
+        [Space(10)]
+
+        [Header("Dodge Setup")]
+        [SerializeField] private float dodgeSpeed = 40f;
+        [SerializeField] private float dodgeRecoverTime = 1f;
+        [SerializeField] private float dodgeTime = 0.15f;
+        [SerializeField] private float isInvulnerableTime = 0.1f;
+
 
         public enum OrientationType
         {
@@ -46,7 +55,10 @@ namespace Player
 
         private bool _isMovingHorizontally;
         private bool _isMovingVertically;
-
+        private float _previousDodge;
+        private Vector3 _dodgeDirection;
+        private float _horizontalInput;
+        private float _verticalInput;
         private void Start()
         {
             // Get the Rigidbody component attached to this GameObject
@@ -58,20 +70,18 @@ namespace Player
             // Get the main camera
             _mainCamera = Camera.main;
 
-            _previousMeleeAttack = Time.time;
+            _previousMeleeAttack = Time.time - meleeAttackRecoverTime;
+            _previousDodge = Time.time - dodgeRecoverTime;
         }
 
         private void Update()
         {
-            // Get input from the horizontal and vertical axes
-            float horizontalInput = Input.GetAxis("Horizontal");
-            float verticalInput = Input.GetAxis("Vertical");
+            _horizontalInput = Input.GetAxis("Horizontal");
+            _verticalInput = Input.GetAxis("Vertical");
 
-            // Calculate the movement vector
-            Vector3 movement = new Vector3(horizontalInput, 0, verticalInput) * movementSpeed;
+            TrackMovementInput();
 
-            // Apply the movement to the Rigidbody
-            _rigidbody.MovePosition(_rigidbody.position + movement * Time.deltaTime);
+            Move();
 
             Rotate();
 
@@ -103,17 +113,49 @@ namespace Player
             {
                 _leftShiftButtonDown = false;
             }
+        }
 
-            if (Input.GetButtonDown("Dodge") && !_DodgeButtonDown)
+        private void Move()
+        {
+            // Get input from the horizontal and vertical axes
+            
+
+            if (Input.GetButtonDown("Dodge") && !_DodgeButtonDown && Time.time > _previousDodge + dodgeRecoverTime)
             {
-                MeleeAttack(GetMouseWorldPosition());
-                Debug.LogError("Melee attack");
+                _dodgeDirection = new Vector3(_horizontalInput, 0, _verticalInput);
+                _previousDodge = Time.time;
                 _DodgeButtonDown = true;
+
+                if (!TrackMovementInput()) {
+                    // Move toward the direction the player is facing
+                    _dodgeDirection = transform.forward;
+                }
+
+                GetComponent<Damageable>().setIsInvulnerable(true);
             }
 
-            if (Input.GetButtonUp("Fire3"))
-            {
+            if (Input.GetButtonUp("Dodge"))
+            { 
                 _DodgeButtonDown = false;
+            }
+
+            if (Time.time > _previousDodge + isInvulnerableTime && GetComponent<Damageable>().getIsInvulnerable()) {
+                GetComponent<Damageable>().setIsInvulnerable(false);
+            }
+
+            if (Time.time > _previousDodge && Time.time < _previousDodge + dodgeTime)
+            // If boost of movement is needed (for dodge)
+            {
+                // Apply the movement to the Rigidbody
+                _rigidbody.MovePosition(_rigidbody.position + _dodgeDirection * dodgeSpeed * Time.deltaTime);
+            }
+            else
+            {
+                // Calculate the movement vector
+                Vector3 movement = new Vector3(_horizontalInput, 0, _verticalInput) * movementSpeed;
+
+                // Apply the movement to the Rigidbody
+                _rigidbody.MovePosition(_rigidbody.position + movement * Time.deltaTime);
             }
         }
         
@@ -156,14 +198,13 @@ namespace Player
             Vector3 origin = transform.position;
             Vector3 forward = (transform.forward * hitRange) + origin;
 
-            if (_meleeAttackBox == null && Time.time > _previousMeleeAttack + recoverTime) {
+            if (_meleeAttackBox == null && Time.time > _previousMeleeAttack + meleeAttackRecoverTime) {
                 _previousMeleeAttack = Time.time;
                 GameObject attackBox = Instantiate(MeleeAttackPrefab, forward, transform.rotation);
                 _meleeAttackBox = attackBox.GetComponent<MeleeAttackBox>();
                 _meleeAttackBox.transform.parent = gameObject.transform;
                 if (_meleeAttackBox != null)
                 {
-                    Debug.LogError("create");
                     var canAttackList = new List<string> { "Enemy" };
                     _meleeAttackBox.SendMessage("EditCanAttack", canAttackList);
                 }
@@ -177,11 +218,7 @@ namespace Player
             {
                 case OrientationType.BasedOnInput:
                     if (TrackMovementInput()) {
-                        // Get input from the horizontal and vertical axes
-                        float horizontalInput = Input.GetAxis("Horizontal");
-                        float verticalInput = Input.GetAxis("Vertical");
-
-                        targetRotation = Quaternion.LookRotation(new Vector3(horizontalInput, 0, verticalInput));
+                        targetRotation = Quaternion.LookRotation(new Vector3(_horizontalInput, 0, _verticalInput));
                         // Smoothly rotate towards the target rotation
                         transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
                     }
