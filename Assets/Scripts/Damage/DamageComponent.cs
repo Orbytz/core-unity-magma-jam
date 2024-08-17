@@ -17,8 +17,6 @@ namespace Damage
         [SerializeField] private int damage = 10;
         [SerializeField] private List<string> canAttack = new List<string>();
         
-        
-        
         /**
          * Deal damage to the target on collision.
          */
@@ -28,7 +26,9 @@ namespace Damage
             if(other.gameObject.GetComponent<Damageable>()==null) return;
             if (canAttack.Contains(other.gameObject.GetComponent<Damageable>().GetTag()))
             {
+                Debug.LogError(gameObject.name + " hit " + other.gameObject.name);
                 ApplyDamage(other);
+                Destroy(gameObject);
             }
         }
     
@@ -36,6 +36,17 @@ namespace Damage
         {
             Debug.LogError("damage");
             other.gameObject.GetComponent<Damageable>().ApplyDamage(damage);
+        }
+
+        public List<string> GetCanAttack()
+        {
+            return canAttack;
+        }
+
+        public void EditCanAttack(List<string> canAttackList)
+        {
+            canAttack = new List<string>();
+            canAttack.AddRange(canAttackList);
         }
     }
 }

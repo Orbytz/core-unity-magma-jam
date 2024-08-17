@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: -6124658105131871700}
   m_Layer: 0
   m_Name: Projectile
-  m_TagString: Untagged
+  m_TagString: Note
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -136,7 +136,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 10
   canAttack:
-  - Enemy
+  - Player
 --- !u!54 &-6124658105131871700
 Rigidbody:
   m_ObjectHideFlags: 0

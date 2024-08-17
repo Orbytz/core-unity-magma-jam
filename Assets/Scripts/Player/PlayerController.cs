@@ -1,5 +1,7 @@
 using System;
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Player
 {
@@ -82,6 +84,9 @@ namespace Player
             //check if the Projectile component exists
             if (projectileComponent != null)
             {
+                var canAttackList = new List<string> { "Enemy" };
+                projectileComponent.SendMessage("EditCanAttack", canAttackList);
+
                 //set the initial direction of the projectile
                 projectileComponent.SetInitialDirection((targetPosition - transform.position).normalized);
             }

@@ -244,6 +244,9 @@ MonoBehaviour:
   canAttack: []
   health: 100
   tag: Enemy
+  hitColor: {r: 1, g: 0, b: 0, a: 1}
+  hitEffectDuration: 0.2
+  colorChangeDuration: 0.2
 --- !u!1 &256701478
 GameObject:
   m_ObjectHideFlags: 0
@@ -458,6 +461,9 @@ MonoBehaviour:
   canAttack: []
   health: 100
   tag: Enemy
+  hitColor: {r: 1, g: 0, b: 0, a: 1}
+  hitEffectDuration: 0.2
+  colorChangeDuration: 0.2
 --- !u!1 &555478554
 GameObject:
   m_ObjectHideFlags: 0
@@ -495,6 +501,9 @@ MonoBehaviour:
   canAttack: []
   health: 100
   tag: Enemy
+  hitColor: {r: 1, g: 0, b: 0, a: 1}
+  hitEffectDuration: 0.2
+  colorChangeDuration: 0.2
 --- !u!54 &555478556
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -602,7 +611,7 @@ Transform:
   m_GameObject: {fileID: 555478554}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.9199996, y: 1.1700001, z: -6.32}
+  m_LocalPosition: {x: -0.58, y: 1.1700001, z: 4.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -868,7 +877,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 5
   projectilePrefab: {fileID: 3345562608605307880, guid: d20f1b4b149104c94b88ac30db2413f0, type: 3}
-  hitRange: 5
+  hitRange: 2
+  meleeAttackDamage: 30
   enemyLayers:
     serializedVersion: 2
     m_Bits: 64
@@ -888,6 +898,9 @@ MonoBehaviour:
   canAttack: []
   health: 100
   tag: Player
+  hitColor: {r: 1, g: 0, b: 0, a: 1}
+  hitEffectDuration: 0.2
+  colorChangeDuration: 0.2
 --- !u!1 &1300251903
 GameObject:
   m_ObjectHideFlags: 0
@@ -1116,6 +1129,9 @@ MonoBehaviour:
   canAttack: []
   health: 100
   tag: Player
+  hitColor: {r: 1, g: 0, b: 0, a: 1}
+  hitEffectDuration: 0.2
+  colorChangeDuration: 0.2
 --- !u!1 &1841959250
 GameObject:
   m_ObjectHideFlags: 0
@@ -1238,6 +1254,9 @@ MonoBehaviour:
   canAttack: []
   health: 100
   tag: Enemy
+  hitColor: {r: 1, g: 0, b: 0, a: 1}
+  hitEffectDuration: 0.2
+  colorChangeDuration: 0.2
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
