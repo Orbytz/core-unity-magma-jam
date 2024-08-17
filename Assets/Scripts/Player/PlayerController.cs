@@ -18,7 +18,6 @@ namespace Player
         [Space(10)]
 
         [Header("Attack Setup")]
-        [SerializeField] private int hitRange = 2;
         [SerializeField] private int meleeAttackDamage = 30;
         [SerializeField] private LayerMask enemyLayers;  // The layers that should be considered as enemies
         [SerializeField] private float rotationSpeed = 10f;  // Speed at which the player rotates
