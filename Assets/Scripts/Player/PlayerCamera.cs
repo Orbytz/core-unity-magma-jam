@@ -20,7 +20,6 @@ namespace Player
         private void Start()
         {
             
-            
         }
         
         // Update is called once per frame

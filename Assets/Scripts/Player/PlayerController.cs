@@ -1,4 +1,5 @@
 using System;
+using Damage;
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
@@ -64,7 +65,8 @@ namespace Player
 
             if (Input.GetButtonDown("Fire3") && !_leftShiftButtonDown)
             {
-                MeleeAttack();
+                MeleeAttack(GetMouseWorldPosition());
+                Debug.LogError("Melee attack");
                 _leftShiftButtonDown = true;
             }
 
@@ -108,17 +110,21 @@ namespace Player
             return Vector3.zero;
         }
 
-        private void MeleeAttack()
+        private void MeleeAttack(Vector3 targetPosition)
         {
             RaycastHit hit;
-            Vector3 forward = transform.TransformDirection(Vector3.forward);
             Vector3 origin = transform.position;
-
-            if(Physics.Raycast(origin, forward, out hit, hitRange, enemyLayers))
-            {
-                hit.transform.gameObject.SendMessage("ApplyDamage", meleeAttackDamage);
-            }
+            Vector3 forward = targetPosition - origin;
             
+            if (Physics.Raycast(origin, forward, out hit, hitRange, enemyLayers))
+            {
+                Damageable damageable = hit.transform.GetComponent<Damageable>();
+                if (damageable != null)
+                {
+                    damageable.ApplyDamage(meleeAttackDamage);
+                }
+            }
+            Debug.DrawRay(origin, forward * hitRange, Color.red);
         }
     }
 }
