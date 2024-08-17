@@ -28,17 +28,19 @@ namespace Enemies
 
         void Update()
         {
-            // If you want to update the destination dynamically
-            if (Vector3.Distance(agent.destination, target.transform.position) > 0.1f)
-            {
-                agent.SetDestination(target.transform.position);
-            }
+            if (target != null) {
+                // If you want to update the destination dynamically
+                if (Vector3.Distance(agent.destination, target.transform.position) > 0.1f)
+                {
+                    agent.SetDestination(target.transform.position);
+                }
 
-            if (Time.time > _nextShoot) {
-            // Update the time when the enemy can shoot next
-            _nextShoot = Time.time + shootRate;
+                if (Time.time > _nextShoot) {
+                    // Update the time when the enemy can shoot next
+                    _nextShoot = Time.time + shootRate;
 
-            Shoot();
+                    Shoot();
+                }
             }
         }
 

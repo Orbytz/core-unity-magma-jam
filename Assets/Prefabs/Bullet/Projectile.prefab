@@ -13,11 +13,11 @@ GameObject:
   - component: {fileID: 788906676626503641}
   - component: {fileID: 1821309732780511756}
   - component: {fileID: 5894940973338332520}
-  - component: {fileID: 5050004652572380187}
   - component: {fileID: -6124658105131871700}
-  m_Layer: 0
+  - component: {fileID: 7860974583981637066}
+  m_Layer: 6
   m_Name: Projectile
-  m_TagString: Note
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -122,21 +122,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &5050004652572380187
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3345562608605307880}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ac7fc49da1704b90b35289111684502, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damage: 10
-  canAttack:
-  - Player
 --- !u!54 &-6124658105131871700
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -164,3 +149,23 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &7860974583981637066
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3345562608605307880}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 210040be912f48b9ab3d4e91d94e587d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 10
+  canAttack:
+  - Player
+  health: 1
+  tag: Enemy
+  hitColor: {r: 1, g: 0, b: 0, a: 1}
+  hitEffectDuration: 0.5
+  colorChangeDuration: 0.2

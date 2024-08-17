@@ -667,6 +667,7 @@ GameObject:
   - component: {fileID: 555478555}
   - component: {fileID: 555478561}
   - component: {fileID: 555478562}
+  - component: {fileID: 555478556}
   m_Layer: 6
   m_Name: Enemy
   m_TagString: Enemy
@@ -840,6 +841,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df659a6c135246d7b2a29d297c987dbc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  projectilePrefab: {fileID: 3345562608605307880, guid: d20f1b4b149104c94b88ac30db2413f0, type: 3}
+  shootRate: 1
 --- !u!1 &649285447
 GameObject:
   m_ObjectHideFlags: 0
@@ -1137,12 +1140,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5e6da9a2838349e78e3e9b861e762d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackRange: 1
-  damage: 10
-  layerMask:
-    serializedVersion: 2
-    m_Bits: 0
-  attackCooldown: 1
 --- !u!1 &1300251903
 GameObject:
   m_ObjectHideFlags: 0
