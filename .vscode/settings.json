@@ -51,5 +51,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Team Magma GMTK24 Jam Game.sln"
+    "dotnet.defaultSolution": "core-unity-magma-jam.sln"
 }
