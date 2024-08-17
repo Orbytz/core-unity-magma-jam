@@ -11,17 +11,23 @@ namespace Player
         // Movement speed of the player
         [Header("Movement Setup")]
         [SerializeField] private float movementSpeed = 15f;
-        [SerializeField] private GameObject projectilePrefab;
-        [SerializeField] private GameObject MeleeAttackPrefab;
-        [SerializeField] private float hitRange = 0.5f;
-        [SerializeField] private float recoverTime = 0.7f;
+        [SerializeField] private OrientationType orientation;
 
         [Space(10)]
 
         [Header("Attack Setup")]
-        [SerializeField] private int meleeAttackDamage = 30;
+        [SerializeField] private GameObject projectilePrefab;
         [SerializeField] private LayerMask enemyLayers;  // The layers that should be considered as enemies
         [SerializeField] private float rotationSpeed = 10f;  // Speed at which the player rotates
+        [SerializeField] private GameObject MeleeAttackPrefab;
+        [SerializeField] private float hitRange = 0.5f;
+        [SerializeField] private float recoverTime = 0.7f;
+
+        public enum OrientationType
+        {
+            TowardMouse,
+            BasedOnInput
+        }
 
         // Rigidbody component for physics-based movement
         private Rigidbody _rigidbody;
@@ -30,11 +36,16 @@ namespace Player
 
         private bool _leftShiftButtonDown;
 
+        private bool _DodgeButtonDown;
+
         private Camera _mainCamera;  // Reference to the main camera
 
         private MeleeAttackBox _meleeAttackBox = null;
 
         private float _previousMeleeAttack;
+
+        private bool _isMovingHorizontally;
+        private bool _isMovingVertically;
 
         private void Start()
         {
@@ -62,7 +73,7 @@ namespace Player
             // Apply the movement to the Rigidbody
             _rigidbody.MovePosition(_rigidbody.position + movement * Time.deltaTime);
 
-            RotateTowardsMouse();
+            Rotate();
 
             Attack();
         }
@@ -91,6 +102,18 @@ namespace Player
             if (Input.GetButtonUp("Fire3"))
             {
                 _leftShiftButtonDown = false;
+            }
+
+            if (Input.GetButtonDown("Dodge") && !_DodgeButtonDown)
+            {
+                MeleeAttack(GetMouseWorldPosition());
+                Debug.LogError("Melee attack");
+                _DodgeButtonDown = true;
+            }
+
+            if (Input.GetButtonUp("Fire3"))
+            {
+                _DodgeButtonDown = false;
             }
         }
         
@@ -130,7 +153,6 @@ namespace Player
 
         private void MeleeAttack(Vector3 targetPosition)
         {
-            RaycastHit hit;
             Vector3 origin = transform.position;
             Vector3 forward = (transform.forward * hitRange) + origin;
 
@@ -148,24 +170,60 @@ namespace Player
             }
         }
 
-        void RotateTowardsMouse()
+        void Rotate()
         {
-            // Get the mouse position in the world space
-            Ray ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
-            Plane groundPlane = new Plane(Vector3.up, Vector3.zero);  // Define a plane at the ground level
-
-            // Check where the ray intersects the plane
-            if (groundPlane.Raycast(ray, out float distance))
+            Quaternion targetRotation;
+            switch (orientation)
             {
-                Vector3 targetPoint = ray.GetPoint(distance);  // Get the point on the plane
-                Vector3 direction = (targetPoint - transform.position).normalized;  // Calculate the direction
+                case OrientationType.BasedOnInput:
+                    if (TrackMovementInput()) {
+                        // Get input from the horizontal and vertical axes
+                        float horizontalInput = Input.GetAxis("Horizontal");
+                        float verticalInput = Input.GetAxis("Vertical");
 
-                // Create a target rotation
-                Quaternion targetRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+                        targetRotation = Quaternion.LookRotation(new Vector3(horizontalInput, 0, verticalInput));
+                        // Smoothly rotate towards the target rotation
+                        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+                    }
+                    break;
+                case OrientationType.TowardMouse:
+                    // Get the mouse position in the world space
+                    Ray ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
+                    Plane groundPlane = new Plane(Vector3.up, Vector3.zero);  // Define a plane at the ground level
 
-                // Smoothly rotate towards the target rotation
-                transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+                    // Check where the ray intersects the plane
+                    if (groundPlane.Raycast(ray, out float distance))
+                    {
+                        Vector3 targetPoint = ray.GetPoint(distance);  // Get the point on the plane
+                        Vector3 direction = (targetPoint - transform.position).normalized;  // Calculate the direction
+
+                        targetRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+                        // Smoothly rotate towards the target rotation
+                        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+                    }
+                    break;
             }
+        }
+
+        private bool TrackMovementInput()
+        {
+            if (Input.GetButtonDown("Horizontal"))
+            {
+                _isMovingHorizontally = true;
+            }
+            if (Input.GetButtonDown("Vertical"))
+            {
+                _isMovingVertically = true; 
+            }
+            if (Input.GetButtonUp("Horizontal"))
+            {
+                _isMovingHorizontally = false;
+            }
+            if (Input.GetButtonUp("Vertical"))
+            {
+                _isMovingVertically = false; 
+            }
+            return _isMovingHorizontally || _isMovingVertically;
         }
     }
 }
