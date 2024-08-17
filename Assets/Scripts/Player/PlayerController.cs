@@ -11,12 +11,11 @@ namespace Player
         // Movement speed of the player
         [SerializeField] private float movementSpeed = 5f;
         [SerializeField] private GameObject projectilePrefab;
-
-        [SerializeField] private int hitRange = 2;
-
+        [SerializeField] private GameObject MeleeAttackPrefab;
+        [SerializeField] private float hitRange = 0.5f;
         [SerializeField] private int meleeAttackDamage = 30;
-
         [SerializeField] private LayerMask enemyLayers;  // The layers that should be considered as enemies
+        [SerializeField] private float rotationSpeed = 10f;  // Speed at which the player rotates
 
         // Rigidbody component for physics-based movement
         private Rigidbody _rigidbody;
@@ -24,6 +23,10 @@ namespace Player
         private bool _leftMouseButtonDown;
 
         private bool _leftShiftButtonDown;
+
+        private Camera _mainCamera;  // Reference to the main camera
+
+        private MeleeAttackBox _meleeAttackBox = null;
 
         private void Start()
         {
@@ -33,6 +36,8 @@ namespace Player
             {
                 Debug.LogError("Rigidbody component is missing from the player object.");
             }
+            // Get the main camera
+            _mainCamera = Camera.main;
         }
 
         private void Update()
@@ -46,6 +51,9 @@ namespace Player
 
             // Apply the movement to the Rigidbody
             _rigidbody.MovePosition(_rigidbody.position + movement * Time.deltaTime);
+
+            RotateTowardsMouse();
+
             Attack();
         }
 
@@ -114,17 +122,39 @@ namespace Player
         {
             RaycastHit hit;
             Vector3 origin = transform.position;
-            Vector3 forward = targetPosition - origin;
-            
-            if (Physics.Raycast(origin, forward, out hit, hitRange, enemyLayers))
-            {
-                Damageable damageable = hit.transform.GetComponent<Damageable>();
-                if (damageable != null)
+            Vector3 forward = (transform.forward * hitRange) + origin;
+
+            if (_meleeAttackBox == null) {
+                GameObject attackBox = Instantiate(MeleeAttackPrefab, forward, transform.rotation);
+                _meleeAttackBox = attackBox.GetComponent<MeleeAttackBox>();
+                _meleeAttackBox.transform.parent = gameObject.transform;
+                if (_meleeAttackBox != null)
                 {
-                    damageable.ApplyDamage(meleeAttackDamage);
+                    Debug.LogError("create");
+                    var canAttackList = new List<string> { "Enemy" };
+                    _meleeAttackBox.SendMessage("EditCanAttack", canAttackList);
                 }
             }
-            Debug.DrawRay(origin, forward * hitRange, Color.red);
+        }
+
+        void RotateTowardsMouse()
+        {
+            // Get the mouse position in the world space
+            Ray ray = _mainCamera.ScreenPointToRay(Input.mousePosition);
+            Plane groundPlane = new Plane(Vector3.up, Vector3.zero);  // Define a plane at the ground level
+
+            // Check where the ray intersects the plane
+            if (groundPlane.Raycast(ray, out float distance))
+            {
+                Vector3 targetPoint = ray.GetPoint(distance);  // Get the point on the plane
+                Vector3 direction = (targetPoint - transform.position).normalized;  // Calculate the direction
+
+                // Create a target rotation
+                Quaternion targetRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+
+                // Smoothly rotate towards the target rotation
+                transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+            }
         }
     }
 }

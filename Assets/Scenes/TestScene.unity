@@ -953,7 +953,6 @@ GameObject:
   - component: {fileID: 1056587388}
   - component: {fileID: 1056587382}
   - component: {fileID: 1056587389}
-  - component: {fileID: 1056587390}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -1057,7 +1056,7 @@ Transform:
   m_GameObject: {fileID: 1056587380}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.3857657, y: 1.55, z: -0.019679442}
+  m_LocalPosition: {x: -1.18, y: 1.33, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1104,11 +1103,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementSpeed: 5
   projectilePrefab: {fileID: 3345562608605307880, guid: d20f1b4b149104c94b88ac30db2413f0, type: 3}
+  MeleeAttackPrefab: {fileID: 3345562608605307880, guid: 320ad44a5e6169c4e8aad40d4f02f2f6, type: 3}
   hitRange: 2
   meleeAttackDamage: 30
   enemyLayers:
     serializedVersion: 2
     m_Bits: 64
+  rotationSpeed: 10
 --- !u!114 &1056587389
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1128,18 +1129,6 @@ MonoBehaviour:
   hitColor: {r: 1, g: 0, b: 0, a: 1}
   hitEffectDuration: 0.5
   colorChangeDuration: 0.2
---- !u!114 &1056587390
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1056587380}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5e6da9a2838349e78e3e9b861e762d8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1300251903
 GameObject:
   m_ObjectHideFlags: 0
