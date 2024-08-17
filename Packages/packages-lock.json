@@ -1,5 +1,21 @@
 {
   "dependencies": {
+    "com.kamzhanyue.audio-delivery": {
+      "version": "https://github.com/kam-zhan-yue/audio-delivery.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {
+        "com.kamzhanyue.utility-delivery": "0.1.0"
+      },
+      "hash": "58ea3b83ddc2128f2b50876262eb439fcbd393b1"
+    },
+    "com.kamzhanyue.utility-delivery": {
+      "version": "https://github.com/kam-zhan-yue/utility-delivery.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "53bd103e8027300e38f96d5c8ca3af4abc76c1e0"
+    },
     "com.unity.2d.animation": {
       "version": "9.1.1",
       "depth": 1,
@@ -26,7 +42,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.2d.common": {
-      "version": "8.0.2",
+      "version": "8.0.3",
       "depth": 2,
       "source": "registry",
       "dependencies": {
@@ -63,12 +79,12 @@
       "dependencies": {}
     },
     "com.unity.2d.spriteshape": {
-      "version": "9.0.3",
+      "version": "9.0.4",
       "depth": 1,
       "source": "registry",
       "dependencies": {
         "com.unity.mathematics": "1.1.0",
-        "com.unity.2d.common": "8.0.2",
+        "com.unity.2d.common": "8.0.3",
         "com.unity.modules.physics2d": "1.0.0"
       },
       "url": "https://packages.unity.com"
@@ -95,7 +111,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.burst": {
-      "version": "1.8.16",
+      "version": "1.8.17",
       "depth": 3,
       "source": "registry",
       "dependencies": {
@@ -137,7 +153,7 @@
         "com.unity.2d.pixel-perfect": "5.0.3",
         "com.unity.2d.psdimporter": "8.0.5",
         "com.unity.2d.sprite": "1.0.0",
-        "com.unity.2d.spriteshape": "9.0.3",
+        "com.unity.2d.spriteshape": "9.0.4",
         "com.unity.2d.tilemap": "1.0.0",
         "com.unity.2d.tilemap.extras": "3.1.2",
         "com.unity.2d.aseprite": "1.1.4"
