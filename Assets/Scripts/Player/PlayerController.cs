@@ -152,10 +152,11 @@ namespace Player
             else
             {
                 // Calculate the movement vector
-                Vector3 movement = new Vector3(_horizontalInput, 0, _verticalInput) * movementSpeed;
+                Vector3 movement = new Vector3(_horizontalInput * movementSpeed, _rigidbody.velocity.y, _verticalInput * movementSpeed);
 
                 // Apply the movement to the Rigidbody
-                _rigidbody.MovePosition(_rigidbody.position + movement * Time.deltaTime);
+                //_rigidbody.MovePosition(_rigidbody.position + movement * Time.deltaTime);
+                _rigidbody.velocity = movement;
             }
         }
         
