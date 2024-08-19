@@ -88,6 +88,15 @@ namespace Player
             Attack();
         }
 
+        private void FixedUpdate()
+        {
+            //Move();
+
+            //Rotate();
+
+            //Attack();
+        }
+
         private void Attack()
         {
             //if the player has attacked need to release the mouse to attack again
@@ -151,16 +160,23 @@ namespace Player
             }
             else
             {
+                Vector3 movement;
                 // Calculate the movement vector
-                Vector3 movement = new Vector3(_horizontalInput * movementSpeed, _rigidbody.velocity.y, _verticalInput * movementSpeed);
+                //Slow down the speed by 1/sqrt(2) if both keys pressed
+                if (_isMovingHorizontally && _isMovingVertically)
+                {
+                    movement = new Vector3(_horizontalInput * movementSpeed * 0.69f, _rigidbody.velocity.y, _verticalInput * movementSpeed * 0.69f);
+                }
+                else
+                {
+                    movement = new Vector3(_horizontalInput * movementSpeed, _rigidbody.velocity.y, _verticalInput * movementSpeed);
+                }
 
                 // Apply the movement to the Rigidbody
                 //_rigidbody.MovePosition(_rigidbody.position + movement * Time.deltaTime);
 
                 // Apply velocity to the Rigidbody
                 _rigidbody.velocity = movement;
-                //Adding an extra gravity
-                _rigidbody.AddForce(0, -1f, 0);
             }
         }
         
