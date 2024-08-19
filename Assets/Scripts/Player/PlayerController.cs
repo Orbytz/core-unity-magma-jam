@@ -156,7 +156,11 @@ namespace Player
 
                 // Apply the movement to the Rigidbody
                 //_rigidbody.MovePosition(_rigidbody.position + movement * Time.deltaTime);
+
+                // Apply velocity to the Rigidbody
                 _rigidbody.velocity = movement;
+                //Adding an extra gravity
+                _rigidbody.AddForce(0, -1f, 0);
             }
         }
         
